@@ -5,6 +5,7 @@ from flask import Flask, redirect, request, flash, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import db, connect_db, Pet
+from forms import AddPetForm
 
 app = Flask(__name__)
 
@@ -65,19 +66,30 @@ route /add (both POST and GET method)
 def add_snack():
     """Snack add form; handle adding."""
 
-    # form = AddPetForm()
+    form = AddPetForm()
 
-    # if form.validate_on_submit():
-    #     name = form.name.data
-    #     price = form.price.data
-    #     # do stuff with data/insert to db
+    if form.validate_on_submit():
 
-    #     flash(f"Added {name} at {price}")
-    #     return redirect("/add")
+        name = form.name.data
+        species = form.species.data
+        photo_url = form.photo_url.data
+        age = form.age.data
+        notes = form.notes.data
 
-    # else:
-    #     return render_template(
-    #         "snack_add_form.html", form=form)
+
+        new_pet = Pet(name = name, species = species,
+                        photo_url = photo_url,
+                            age = age, notes = notes)
+
+        db.session.add(new_pet)
+        db.session.commit()
+
+        flash(f"Added {name} the {species}!")
+        return redirect("/")
+
+    else:
+        return render_template(
+            "add_pet.html", form=form)
 
 
 
