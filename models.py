@@ -14,22 +14,6 @@ def connect_db(app):
     db.app = app
     db.init_app(app)
 
-# # Pet class:
-
-# # Columns:
-# id serial
-
-# name text reuired
-
-# species text required (VALIDATE: cat, dog, or porcupine)
-
-# photo_url: text required empty string by default (VALIDATE: must be URL if entered)
-
-# age: text (baby, young, adult, senior) required
-
-# notes: text opt.
-
-# available: true/false required default to avail (coerce boolean?)
 
 class Pet(db.Model):
     """Pet"""

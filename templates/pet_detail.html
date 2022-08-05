@@ -1,15 +1,28 @@
-{% extends 'base.html' %} {% block title %}Pets{% endblock %} {% block content
-  %}
+{% extends 'base.html' %} {% block title %}{{pet.name}}{% endblock %} {% block
+content %}
 
-  <h1>{{pet.name}}'s Profile</h1>
-    <div>
-      {% if pet.photo_url %}
-      <img src="{{ pet.photo_url }}" alt="pet pic" />
-      {% endif %}
+<h1>{{pet.name}}'s Profile</h1>
+<div>
+  {% if pet.photo_url %}
+  <img src="{{ pet.photo_url }}" alt="pet pic" />
+  {% endif %}
 
-         <div>Meet {{pet.name}} - a {{pet.age}} {{pet.species}} </div>
+  <div>Meet {{pet.name}} - a {{pet.age}} {{pet.species}}</div>
+  <form id="add_pet" method="POST">
+    {{ form.hidden_tag() }}
+    <!--add type=hidden form fields -->
 
-    </div>
-  <a href="/add"><button>Add Pet</button></a>
+    {% for field in form if field.widget.input_type != 'hidden' %}
 
-  {% endblock %}
+    <p>
+      {{ field.label }} {{ field }} {% for error in field.errors %} {{ error }}
+      {% endfor %}
+    </p>
+
+    {% endfor %}
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+{% endblock %}

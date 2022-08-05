@@ -10,7 +10,7 @@
     {% endif %}
     <p>
       <a href="/{{ pet.id }}">{{ pet.name }}</a>
-      is {% if pet.available %} available {% endif %}!
+      {% if pet.available %} is available! {% endif %}
     </p>
   </div>
   {% endfor %}

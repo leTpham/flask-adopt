@@ -2,7 +2,7 @@
 
 from flask import Flask, redirect, request, flash, render_template
 
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 
 from models import db, connect_db, Pet
 from forms import AddPetForm, EditPetForm
@@ -22,49 +22,20 @@ db.create_all()
 #
 # app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-toolbar = DebugToolbarExtension(app)
+# toolbar = DebugToolbarExtension(app)
 
-
-
-"""
-get request for route "/"
-list pets:
-query from database all the instances of the Pet class
-Pet.query.all()???
-
-name - NOTE: each name links to route of that /pet-id-number
-photo(if avail)
-display "Available" if available
-
-return render_template of pets page html
-
-"""
 
 @app.get('/')
 def root():
-    """Homepage redirects to list of users."""
+    """Homepage that shows list of pets."""
 
     pets = Pet.query.all()
     return render_template('pet_list.html', pets = pets)
 
-"""
 
-
-
-
-handler for add pet form
-route /add (both POST and GET method)
-        validate: (form validate on submit)
--grab data from form -> create new Pet instance for database
--> db add -> db commit -> THEN REDIRECT TO HOME
-
-        else:
-            RE-render the form
-
-"""
 @app.route("/add", methods=["GET", "POST"])
 def add_snack():
-    """Snack add form; handle adding."""
+    """Add Pet Form"""
 
     form = AddPetForm()
 
@@ -93,20 +64,9 @@ def add_snack():
 
 
 
-
-
-
-
-
-
-""" for route /[pet-id-number]
-    query from database and then render to pet_detail.html
-
-    form on page allows edit pet
-"""
 @app.route("/<int:pid>/", methods=["GET", "POST"])
 def edit_user(pid):
-    """Show user edit form and handle edit."""
+    """Show pets profiles and edit form and handle edit."""
 
     pet = Pet.query.get_or_404(pid)
     form = EditPetForm(obj=pet)
@@ -122,19 +82,3 @@ def edit_user(pid):
 
     else:
         return render_template("pet_detail.html", form=form, pet = pet)
-
-
-
-
-
-
-
-
-    """ POST/GET request for route /[pet-id-number]
-            def edit_pet..
-            VALIDATE: edit pet
-            connect to database -> db.commit after
-            redirect to refresh?
-
-            ELSE: Re_render the form
-    """
