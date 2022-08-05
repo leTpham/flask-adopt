@@ -5,7 +5,7 @@ from flask import Flask, redirect, request, flash, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 
 from models import db, connect_db, Pet
-from forms import AddPetForm
+from forms import AddPetForm, EditPetForm
 
 app = Flask(__name__)
 
@@ -104,14 +104,37 @@ def add_snack():
 
     form on page allows edit pet
 """
+@app.route("/<int:pid>/", methods=["GET", "POST"])
+def edit_user(pid):
+    """Show user edit form and handle edit."""
+
+    pet = Pet.query.get_or_404(pid)
+    form = EditPetForm(obj=pet)
+
+    if form.validate_on_submit():
+        pet.photo_url = form.photo_url.data
+        pet.notes = form.notes.data
+        pet.available = form.available.data
+
+        db.session.commit()
+        flash(f"Pet {pid} updated!")
+        return redirect("/")
+
+    else:
+        return render_template("pet_detail.html", form=form, pet = pet)
 
 
-""" POST/GET request for route /[pet-id-number]
-        def edit_pet..
-        VALIDATE: edit pet
-        connect to database -> db.commit after
-        redirect to refresh?
 
-        ELSE: Re_render the form
-"""
 
+
+
+
+
+    """ POST/GET request for route /[pet-id-number]
+            def edit_pet..
+            VALIDATE: edit pet
+            connect to database -> db.commit after
+            redirect to refresh?
+
+            ELSE: Re_render the form
+    """

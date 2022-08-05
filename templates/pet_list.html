@@ -9,7 +9,7 @@
     <img src="{{ pet.photo_url }}" alt="pet pic" />
     {% endif %}
     <p>
-      <a href="/pets/{{ pet.id }}">{{ pet.name }}</a>
+      <a href="/{{ pet.id }}">{{ pet.name }}</a>
       is {% if pet.available %} available {% endif %}!
     </p>
   </div>
