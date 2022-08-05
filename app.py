@@ -1,6 +1,6 @@
 """Flask app for adopt app."""
 
-from flask import Flask
+from flask import Flask, redirect, request, flash, render_template
 
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -37,11 +37,20 @@ display "Available" if available
 
 return render_template of pets page html
 
+"""
+
+@app.get('/')
+def root():
+    """Homepage redirects to list of users."""
+
+    pets = Pet.query.all()
+    return render_template('pet_list.html', pets = pets)
 
 """
 
 
-"""
+
+
 handler for add pet form
 route /add (both POST and GET method)
         validate: (form validate on submit)
@@ -52,6 +61,30 @@ route /add (both POST and GET method)
             RE-render the form
 
 """
+@app.route("/add", methods=["GET", "POST"])
+def add_snack():
+    """Snack add form; handle adding."""
+
+    # form = AddPetForm()
+
+    # if form.validate_on_submit():
+    #     name = form.name.data
+    #     price = form.price.data
+    #     # do stuff with data/insert to db
+
+    #     flash(f"Added {name} at {price}")
+    #     return redirect("/add")
+
+    # else:
+    #     return render_template(
+    #         "snack_add_form.html", form=form)
+
+
+
+
+
+
+
 
 
 """ for route /[pet-id-number]
