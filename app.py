@@ -6,6 +6,7 @@ from flask import Flask, redirect, request, flash, render_template
 
 from models import db, connect_db, Pet
 from forms import AddPetForm, EditPetForm
+from petfinder import show_random_pet, update_auth_token_string
 
 app = Flask(__name__)
 
@@ -25,12 +26,23 @@ db.create_all()
 # toolbar = DebugToolbarExtension(app)
 
 
+auth_token = None
+
+
+@app.before_first_request
+def refresh_credentials():
+    """Just once, get token and store it globally."""
+    global auth_token
+    auth_token = update_auth_token_string()
+
 @app.get('/')
 def root():
     """Homepage that shows list of pets."""
 
     pets = Pet.query.all()
-    return render_template('pet_list.html', pets = pets)
+
+    pf_info = show_random_pet(auth_token)
+    return render_template('pet_list.html', pets = pets, pf_info = pf_info)
 
 
 @app.route("/add", methods=["GET", "POST"])
